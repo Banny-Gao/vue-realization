@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+        <div id='app'>
+            <input type="text" v-model="text">
+            <span>{{JSON.stringify({a:text})}}</span>
+            <span :style='{cursor:"pointer",color:"green"}' v-on:click="text = '' ">清空text</span>
+            <p>{{text + ' word ' +  child.child.text}}</p>
+            <p :style="style">{{style.color}}</p>
+            <p class="pointer" :class="isRed?'red': 'blue'" @click="isRed = !isRed">{{num}}</p>
+            <p v-for='(item,index) in list'>{{list}}</p>
+            <p v-html='strHtml'></p>
+        </div>
+</body>
+
+</html>
+<script src="./observer.js"></script>
+<script src="./watcher.js"></script>
+<script src="./compiler.js"></script>
+<script src="./mvvm.js"></script>
+<script>
+    var vm = new Vue({
+        el:'#app',
+        data() {
+            return {
+                num:1,
+                text: 'hello',
+                child: {
+                    text: 'world',
+                    child: {
+                        text: '2018'
+                    }
+                },
+                isRed: true,
+                list: [1,2,3],
+                strHtml: '<p class="red">我是来自data的html</p>',
+                style: {
+                    color: '#00bbcc'
+                }
+            }
+        },
+        computed:{
+            computeText: function() {
+                return this.text + ' ' + this.child.text +' form computed'
+            },
+            getText: {
+                get() {
+                    return this.text+' form get '
+                }
+            }
+        },
+        methods:{
+            numAdd() {
+                this.num ++
+            },
+            addList() {
+                // console.log(1)
+                this.list.push(this.text)
+            }
+        },
+        created() {
+            // console.log('created')
+        },
+        mounted() {
+            // console.log('mounted')
+        },
+        update() {
+            // console.log('update')
+        },
+        watch:{
+            text: function(newVal,old) {
+                // console.log(newVal,old)
+            },
+           'child.text': function(newVal,old) {
+                console.log('child.text => '+ newVal)
+            },
+            // list: function(newVal,oldVal) {
+            //     console.log(newVal,oldVal)
+            // }
+        }
+    })
+</script>
+<style type="text/css">
+    .red{
+        color: red;
+    }
+    .blue{
+        color: blue;
+    }
+    .pointer{
+        cursor: pointer;
+    }
+</style>
